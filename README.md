@@ -1,5 +1,7 @@
 Colour Match  ( Mobile Casual Game )
+
 A fast-paced mobile reflex game developed in Unity for Android. The player must pass a colour-changing ball through the matching colour segment of a rotating multi-coloured ring. Miss the wrong colour and the game ends.
+
 Gameplay Features
 
 Colour-matching mechanic with a rotating segmented ring
