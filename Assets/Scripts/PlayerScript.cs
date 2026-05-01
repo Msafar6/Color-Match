@@ -15,7 +15,7 @@ public class PlayerScript : MonoBehaviour
 
     public Color32 red;
     public Color32 yellow;
-    public Color32 megenta;
+    public Color32 magenta;
     public Color32 cyan;
 
     public string CurrentColor;
@@ -77,7 +77,7 @@ public class PlayerScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "ColorChanger")
+        if (collision.CompareTag("ColorChanger"))
         {
             
         FindObjectOfType<soundmanager>().PlaySoundManager("point");
