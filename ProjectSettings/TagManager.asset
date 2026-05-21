@@ -10,6 +10,10 @@ TagManager:
   - yellow
   - megenta
   - finish
+  - ObjCreate
+  - ObjCreate1
+  - ObjCreate2
+  - ObjCreate3
   layers:
   - Default
   - TransparentFX

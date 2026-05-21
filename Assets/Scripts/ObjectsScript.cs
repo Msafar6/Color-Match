@@ -4,14 +4,14 @@ using UnityEngine;
 using DG.Tweening;
 public class ObjectsScript : MonoBehaviour
 {
-    public List<GameObject> obj;
+    
     public GameObject MovingBars1;
     public GameObject MovingBars2;
 
     public GameObject cam;
     public GameObject player;
 
-    public float SpeedOfRotation;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -35,9 +35,7 @@ public class ObjectsScript : MonoBehaviour
         {
             cam.GetComponent<Transform>().position = new Vector3(0, player.GetComponent<Transform>().position.y, -10);
         }
-        for (int i=0; i<obj.Count;i++) {
-            obj[i].GetComponent<Transform>().Rotate(new Vector3(0, 0, SpeedOfRotation));
-        }
+       
        
         
         

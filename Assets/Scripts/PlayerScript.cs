@@ -6,141 +6,183 @@ using UnityEngine.UI;
 
 public class PlayerScript : MonoBehaviour
 {
-
+    public GameObject[] Barriers;
+    GameObject previousBarrier;
     public Rigidbody2D PlayerRig;
     public float JumpSpeed;
     public Text ScoreText;
+
+
     public GameObject BloomParticle;
     public GameObject FinishParticle;
 
     public Color32 red;
     public Color32 yellow;
-    public Color32 magenta;
+    public Color32 megenta;
     public Color32 cyan;
 
     public string CurrentColor;
     int random;
-
+    private float bottomLimit;
     public static int Score;
-    
+
     // Start is called before the first frame update
     void Start()
     {
+
         ScoreText.text = "00";
-       // Score= PlayerPrefs.GetInt("Score");
-        switch (Random.Range(0,3))
+        // Score= PlayerPrefs.GetInt("Score");
+        switch (Random.Range(0, 3))
         {
             case 0:
                 this.gameObject.GetComponent<SpriteRenderer>().color = red;
                 CurrentColor = "red";
-               
+
                 break;
 
             case 1:
                 this.gameObject.GetComponent<SpriteRenderer>().color = yellow;
                 CurrentColor = "yellow";
-             
+
                 break;
             case 2:
                 this.gameObject.GetComponent<SpriteRenderer>().color = megenta;
                 CurrentColor = "megenta";
-                
+
                 break;
             case 3:
                 this.gameObject.GetComponent<SpriteRenderer>().color = cyan;
                 CurrentColor = "cyan";
-               
+
                 break;
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        //if (Input.GetButton("Fire1"))
-        //{
-        //    Time.timeScale = 1;
+        float bottomLimit = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 10f)).y;
 
-        //}
-
+        if (transform.position.y < bottomLimit)
+        {
+            StartCoroutine(GameOver());
+        }
     }
     private void FixedUpdate()
     {
+        
+
         if (Input.GetButton("Fire1"))
         {
-            PlayerRig.velocity = new Vector2(0, JumpSpeed * Time.fixedDeltaTime) ;
+            PlayerRig.velocity = new Vector2(0, JumpSpeed * Time.fixedDeltaTime);
         }
     }
 
-   
+
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("ColorChanger"))
+        if (collision.tag == "ObjCreate1")
         {
-            
-        FindObjectOfType<soundmanager>().PlaySoundManager("point");
-            Score++;
-            ScoreText.text = Score.ToString();
-            if (Score > PlayerPrefs.GetInt("Score"))
-            { PlayerPrefs.SetInt("Score", Score); }
-            Debug.Log("Color Should be changed");
-            random = Random.Range(0, 3);
+            //Instantiate(obj, new Vector2(0.82f, collision.gameObject.transform.position.y + 15), Quaternion.identity);
+            Barriers[1].SetActive(true);
+            Vector3 newBarrierPos = new Vector3(0.82f, collision.transform.position.y + 16.80f);
+            Barriers[1].transform.position = newBarrierPos;
 
-            switch (random)
+
+
+        }
+        if (collision.tag == "ObjCreate2")
+        {
+            //Instantiate(obj, new Vector2(0.82f, collision.gameObject.transform.position.y + 15), Quaternion.identity);
+            Barriers[2].SetActive(true);
+            Vector3 newBarrierPos = new Vector3(0.82f, collision.transform.position.y + 16.80f);
+            Barriers[2].transform.position = newBarrierPos;
+            Barriers[0].SetActive(false);
+        }
+
+        if (collision.tag == "ObjCreate3")
+        {
+            //Instantiate(obj, new Vector2(0.82f, collision.gameObject.transform.position.y + 15), Quaternion.identity);
+            Barriers[0].SetActive(true);
+            Vector3 newBarrierPos = new Vector3(0.82f, collision.transform.position.y + 16.80f);
+            Barriers[0].transform.position = newBarrierPos;
+            Barriers[1].SetActive(false);
+        }
+
+
+            if (collision.tag == "ColorChanger")
             {
-                case 0:
-                    this.gameObject.GetComponent<SpriteRenderer>().color = red;
-                    CurrentColor = "red";
-                    Instantiate(BloomParticle,this.gameObject.GetComponent<Transform>().position,Quaternion.identity);
-                    Destroy(collision.gameObject);
-                    break;
 
-                case 1:
-                    this.gameObject.GetComponent<SpriteRenderer>().color = yellow;
-                    CurrentColor = "yellow";
-                    Instantiate(BloomParticle, this.gameObject.GetComponent<Transform>().position, Quaternion.identity);
+                FindObjectOfType<soundmanager>().PlaySoundManager("point");
 
-                    Destroy(collision.gameObject);
-                    break;
-                case 2:
-                    this.gameObject.GetComponent<SpriteRenderer>().color = megenta;
-                    CurrentColor = "megenta";
-                    Instantiate(BloomParticle, this.gameObject.GetComponent<Transform>().position, Quaternion.identity);
+                Score++;
+                ScoreText.text = Score.ToString();
 
-                    Destroy(collision.gameObject);
-                    break;
-                case 3:
-                    this.gameObject.GetComponent<SpriteRenderer>().color = cyan;
-                    CurrentColor = "cyan";
-                    Instantiate(BloomParticle, this.gameObject.GetComponent<Transform>().position, Quaternion.identity);
+                if (Score > PlayerPrefs.GetInt("Score"))
+                { PlayerPrefs.SetInt("Score", Score); }
+                Debug.Log("Color Should be changed");
+                random = Random.Range(0, 3);
 
-                    Destroy(collision.gameObject);
-                    break;
+                switch (random)
+                {
+                    case 0:
+                        this.gameObject.GetComponent<SpriteRenderer>().color = red;
+                        CurrentColor = "red";
+                        Instantiate(BloomParticle, this.gameObject.GetComponent<Transform>().position, Quaternion.identity);
+                        Destroy(collision.gameObject);
+                        break;
+
+                    case 1:
+                        this.gameObject.GetComponent<SpriteRenderer>().color = yellow;
+                        CurrentColor = "yellow";
+                        Instantiate(BloomParticle, this.gameObject.GetComponent<Transform>().position, Quaternion.identity);
+
+                        Destroy(collision.gameObject);
+                        break;
+                    case 2:
+                        this.gameObject.GetComponent<SpriteRenderer>().color = megenta;
+                        CurrentColor = "megenta";
+                        Instantiate(BloomParticle, this.gameObject.GetComponent<Transform>().position, Quaternion.identity);
+
+                        Destroy(collision.gameObject);
+                        break;
+                    case 3:
+                        this.gameObject.GetComponent<SpriteRenderer>().color = cyan;
+                        CurrentColor = "cyan";
+                        Instantiate(BloomParticle, this.gameObject.GetComponent<Transform>().position, Quaternion.identity);
+
+                        Destroy(collision.gameObject);
+                        break;
+                }
+
             }
+
+            if (collision.tag != CurrentColor && collision.tag != "ColorChanger" && collision.tag != "ObjCreate1" && collision.tag != "ObjCreate2" && collision.tag != "ObjCreate3")
+            {
+                
+                StartCoroutine(GameOver());
+            }
+
+            /* if (collision.tag == "finish" )
+             {
+                 Instantiate(FinishParticle, this.gameObject.GetComponent<Transform>().position, Quaternion.identity);
+                 //FindObjectOfType<soundmanager>().PlaySoundManager("Gameover");
+                 StartCoroutine(GameOver());
+             }*/
 
         }
 
-        if (collision.tag != CurrentColor && collision.tag != "ColorChanger")
+        IEnumerator GameOver()
         {
             Score = 0;
             FindObjectOfType<soundmanager>().PlaySoundManager("Gameover");
+            Instantiate(FinishParticle, this.gameObject.GetComponent<Transform>().position, Quaternion.identity);
+            this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            this.gameObject.GetComponent<PlayerScript>().enabled = false;
+           
+        yield return new WaitForSeconds(1);
             SceneManager.LoadScene("FinishScreen");
         }
-
-        if (collision.tag == "finish" )
-        {
-            Instantiate(FinishParticle, this.gameObject.GetComponent<Transform>().position, Quaternion.identity);
-            //FindObjectOfType<soundmanager>().PlaySoundManager("Gameover");
-            StartCoroutine(GameOver());
-        }
-
-        }
-
-    IEnumerator GameOver() 
-    {
-        yield return new WaitForSeconds(1);
-        SceneManager.LoadScene("MainScreen");
     }
-}
+
